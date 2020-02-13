@@ -5,8 +5,6 @@ import (
 	"net/http"
 )
 
-type server struct{}
-
 func road(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
