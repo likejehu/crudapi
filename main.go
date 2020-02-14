@@ -1,20 +1,38 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/likejehu/crudapi/models"
 
 	"github.com/gorilla/mux"
 )
 
+func readAll(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("get(read) called"))
+	fmt.Println(models.Books)
+	fmt.Println(models.V)
+	fmt.Fprint(w, "\n Hello all")
+	fmt.Fprint(w, "\n ", models.Books)
+}
+
 func read(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("get(read) called"))
+	fmt.Fprint(w, "Hello single")
+
 }
 
 func create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("post(create) called"))
+	reqBody, _ := ioutil.ReadAll(r.Body)
+	fmt.Fprintf(w, "%+v", string(reqBody))
+
 }
 
 func update(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +51,9 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
 	r := mux.NewRouter()
+	r.HandleFunc("/library", readAll).Methods(http.MethodGet)
 	r.HandleFunc("/library", read).Methods(http.MethodGet)
 	r.HandleFunc("/library", create).Methods(http.MethodPost)
 	r.HandleFunc("/library", update).Methods(http.MethodPut)

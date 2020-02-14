@@ -11,3 +11,13 @@ type Book struct {
 	Rating      uint8
 	Status      string
 }
+
+// Books  is mine books storage representation
+var Books = make(map[string]*Book)
+
+// V is for vendetta
+var V = 1
+
+func main() {
+
+}
