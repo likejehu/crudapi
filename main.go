@@ -14,8 +14,6 @@ import (
 func readAll(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("get(read) called"))
-	fmt.Println(models.Books)
-	fmt.Println(models.V)
 	fmt.Fprint(w, "\n Hello all")
 	fmt.Fprint(w, "\n ", models.Books)
 }
@@ -23,7 +21,7 @@ func readAll(w http.ResponseWriter, r *http.Request) {
 func read(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("get(read) called"))
-	fmt.Fprint(w, "Hello single")
+	fmt.Fprint(w, "\n Hello single")
 
 }
 
