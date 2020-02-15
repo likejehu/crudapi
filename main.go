@@ -1,61 +1,64 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/likejehu/crudapi/models"
-
-	"github.com/gorilla/mux"
 )
 
-func readAll(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("get(read) called"))
-	fmt.Fprint(w, "\n Hello all")
-	fmt.Fprint(w, "\n ", models.Books)
+//----------
+// Handlers
+//----------
+
+func updateBook(c echo.Context) error {
+	b := new(models.Book)
+	if err := c.Bind(b); err != nil {
+		return err
+	}
+	id, _ := strconv.Atoi(c.Param("id"))
+	models.Books[id].Title = b.Title
+	return c.JSON(http.StatusOK, models.Books[id])
 }
 
-func read(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("get(read) called"))
-	fmt.Fprint(w, "\n Hello single")
-
+func createBook(c echo.Context) error {
+	b := &models.Book{
+		ID: models.V,
+	}
+	if err := c.Bind(b); err != nil {
+		return err
+	}
+	models.Books[b.ID] = b
+	models.V++
+	return c.JSON(http.StatusCreated, b)
 }
 
-func create(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("post(create) called"))
-	reqBody, _ := ioutil.ReadAll(r.Body)
-	fmt.Fprintf(w, "%+v", string(reqBody))
-
+func getBook(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	return c.JSON(http.StatusOK, models.Books[id])
 }
 
-func update(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusAccepted)
-	w.Write([]byte("put(update) called"))
-}
-
-func delete(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("delete called"))
-}
-
-func notFound(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte("not found"))
+func deleteBook(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+	delete(models.Books, id)
+	return c.NoContent(http.StatusNoContent)
 }
 
 func main() {
+	e := echo.New()
 
-	r := mux.NewRouter()
-	r.HandleFunc("/library", readAll).Methods(http.MethodGet)
-	r.HandleFunc("/library", read).Methods(http.MethodGet)
-	r.HandleFunc("/library", create).Methods(http.MethodPost)
-	r.HandleFunc("/library", update).Methods(http.MethodPut)
-	r.HandleFunc("/library", delete).Methods(http.MethodDelete)
-	r.HandleFunc("/library", notFound)
-	log.Fatal(http.ListenAndServe(":8080", r))
+	// Middleware
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Routes
+	e.POST("/books", createBook)
+	e.GET("/books/:id", getBook)
+	e.PUT("/books/:id", updateBook)
+	e.DELETE("/books/:id", deleteBook)
+
+	// Start server
+	e.Logger.Fatal(e.Start(":8080"))
 }
