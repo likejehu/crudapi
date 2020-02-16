@@ -1,6 +1,15 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/go-playground/validator"
+)
+
+// CustomValidator is mine validator
+type CustomValidator struct {
+	validator *validator.Validate
+}
 
 // Book  is mine book representation
 type Book struct {
