@@ -11,6 +11,11 @@ type CustomValidator struct {
 	validator *validator.Validate
 }
 
+// Validate is for  validating
+func (cv *CustomValidator) Validate(i interface{}) error {
+	return cv.validator.Struct(i)
+}
+
 // Book  is mine book representation
 type Book struct {
 	ID          int       `json:"id"`
