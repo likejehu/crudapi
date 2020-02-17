@@ -13,13 +13,13 @@ type CustomValidator struct {
 
 // Book  is mine book representation
 type Book struct {
-	ID          int    `json:"id"`
-	Title       string `json:"title"`
-	Author      string `json:"author"`
-	Publisher   string
-	PublishDate time.Time
-	Rating      uint8
-	Status      string
+	ID          int       `json:"id"`
+	Title       string    `json:"title"`
+	Author      string    `json:"author"`
+	Publisher   string    `json:"publisher"`
+	PublishDate time.Time `json:"date"`
+	Rating      uint8     `json:"rating"`
+	Status      string    `json:"status"`
 }
 
 // Books  is mine books storage representation
