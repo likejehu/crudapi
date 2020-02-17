@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/go-playground/validator"
+	"github.com/google/uuid"
 )
 
 // CustomValidator is mine validator
@@ -32,6 +33,9 @@ var Books = map[int]*Book{}
 
 // V is for vendetta
 var V = 1
+
+// BookID is uuid
+var BookID = uuid.New()
 
 func main() {
 
