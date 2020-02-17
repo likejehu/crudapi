@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/go-playground/validator"
-	"github.com/google/uuid"
 )
 
 // CustomValidator is mine validator
@@ -19,7 +18,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 
 // Book  is mine book representation
 type Book struct {
-	ID          int       `json:"id"`
+	ID          [16]byte  `json:"id"`
 	Title       string    `json:"title"`
 	Author      string    `json:"author"`
 	Publisher   string    `json:"publisher"`
@@ -30,12 +29,6 @@ type Book struct {
 
 // Books  is mine books storage representation
 var Books = map[int]*Book{}
-
-// V is for vendetta
-var V = 1
-
-// BookID is uuid
-var BookID = uuid.New()
 
 func main() {
 

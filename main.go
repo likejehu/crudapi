@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/likejehu/crudapi/models"
@@ -25,13 +26,12 @@ func updateBook(c echo.Context) error {
 
 func createBook(c echo.Context) error {
 	b := &models.Book{
-		ID: models.V,
+		ID: uuid.New(),
 	}
 	if err := c.Bind(b); err != nil {
 		return err
 	}
-	models.Books[b.ID] = b
-	models.V++
+
 	return c.JSON(http.StatusCreated, b)
 }
 
