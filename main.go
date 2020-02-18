@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/likejehu/crudapi/db"
 	"github.com/likejehu/crudapi/models"
 )
 
@@ -32,6 +33,7 @@ func createBook(c echo.Context) error {
 		return err
 	}
 
+	db.BooksDB[b.ID] = b
 	return c.JSON(http.StatusCreated, b)
 }
 

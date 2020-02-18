@@ -3,8 +3,12 @@ package db
 import (
 	"fmt"
 
+	"github.com/likejehu/crudapi/models"
 	"github.com/prologic/bitcask"
 )
+
+// BooksDB  is mine books storage representation
+var BooksDB = map[[16]byte]*models.Book{}
 
 // DB is mine representation of database
 var DB, _ = bitcask.Open("/tmp/db")
