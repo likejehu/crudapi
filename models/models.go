@@ -28,7 +28,6 @@ type Book struct {
 }
 
 // Books  is mine books storage representation
-var Books = map[int]*Book{}
 
 func main() {
 

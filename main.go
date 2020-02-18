@@ -22,7 +22,7 @@ func updateBook(c echo.Context) error {
 	}
 	id, _ := strconv.Atoi(c.Param("id"))
 	models.Books[id].Title = b.Title
-	return c.JSON(http.StatusOK, models.Books[id])
+	return c.JSON(http.StatusOK, db.BooksDB[id])
 }
 
 func createBook(c echo.Context) error {
@@ -39,13 +39,13 @@ func createBook(c echo.Context) error {
 }
 
 func getBook(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-	return c.JSON(http.StatusOK, models.Books[id])
+	id := c.Param("id")
+	return c.JSON(http.StatusOK, db.BooksDB[id])
 }
 
 func deleteBook(c echo.Context) error {
-	id, _ := strconv.Atoi(c.Param("id"))
-	delete(models.Books, id)
+	id := c.Param("id")
+	delete(db.BooksDB, id)
 	return c.NoContent(http.StatusNoContent)
 }
 
