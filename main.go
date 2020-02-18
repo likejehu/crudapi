@@ -26,14 +26,15 @@ func updateBook(c echo.Context) error {
 }
 
 func createBook(c echo.Context) error {
+	id := uuid.New().String()
 	b := &models.Book{
-		ID: uuid.New(),
+		ID: id,
 	}
 	if err := c.Bind(b); err != nil {
 		return err
 	}
 
-	db.BooksDB[b.ID] = b
+	db.BooksDB[id] = b
 	return c.JSON(http.StatusCreated, b)
 }
 

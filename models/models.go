@@ -18,7 +18,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 
 // Book  is mine book representation
 type Book struct {
-	ID          [16]byte  `json:"id"`
+	ID          string    `json:"id"`
 	Title       string    `json:"title"`
 	Author      string    `json:"author"`
 	Publisher   string    `json:"publisher"`
