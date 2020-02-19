@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
@@ -20,8 +19,8 @@ func updateBook(c echo.Context) error {
 	if err := c.Bind(b); err != nil {
 		return err
 	}
-	id, _ := strconv.Atoi(c.Param("id"))
-	models.Books[id].Title = b.Title
+	id := c.Param("id")
+	db.BooksDB[id].Title = b.Title
 	return c.JSON(http.StatusOK, db.BooksDB[id])
 }
 
