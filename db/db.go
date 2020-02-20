@@ -19,3 +19,9 @@ func (d *DB) Delete(key string) {
 	delete(d.b, key)
 	return
 }
+
+// Get is get func
+func (d *DB) Get(key string) models.Book {
+	v := *d.b[key]
+	return v
+}
