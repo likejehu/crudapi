@@ -2,19 +2,7 @@ package models
 
 import (
 	"time"
-
-	"github.com/go-playground/validator"
 )
-
-// CustomValidator is mine validator
-type CustomValidator struct {
-	validator *validator.Validate
-}
-
-// Validate is for  validating
-func (cv *CustomValidator) Validate(i interface{}) error {
-	return cv.validator.Struct(i)
-}
 
 // Book  is mine book representation
 type Book struct {
@@ -26,8 +14,6 @@ type Book struct {
 	Rating      uint8     `json:"rating"`
 	Status      string    `json:"status"`
 }
-
-// Books  is mine books storage representation
 
 func main() {
 
