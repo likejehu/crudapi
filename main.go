@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -29,12 +30,16 @@ func createBook(c echo.Context) error {
 	b := &models.Book{
 		ID: id,
 	}
+	var bodyBytes []byte
+	if c.Request().Body != nil {
+		bodyBytes, _ = ioutil.ReadAll(c.Request().Body)
+	}
 	if err := c.Bind(b); err != nil {
 		return err
 	}
 
 	db.BooksDB[id] = b
-	return c.JSON(http.StatusCreated, b)
+	return c.JSON(http.StatusCreated, bodyBytes)
 }
 
 func getBook(c echo.Context) error {
