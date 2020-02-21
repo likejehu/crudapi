@@ -28,7 +28,8 @@ func (d *DB) Get(key string) models.Book {
 }
 
 // Put is create func
-func (d *DB) Put() {
+func (d *DB) Put(value []byte) {
+
 	id := uuid.New().String()
 	b := &models.Book{
 		ID: id,
