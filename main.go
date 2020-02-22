@@ -32,7 +32,8 @@ func createBook(c echo.Context) (err error) {
 	}
 	id := uuid.New().String()
 	b.ID = id
-	db.BooksDB[id] = b
+
+	db.Library.Put(id, b)
 	return c.JSON(http.StatusCreated, b)
 }
 

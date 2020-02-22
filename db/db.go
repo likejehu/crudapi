@@ -14,6 +14,9 @@ type DB struct {
 	b map[string]*models.Book
 }
 
+// Library is mine library
+var Library = new(DB)
+
 // Delete is delete func
 func (d *DB) Delete(key string) {
 	delete(d.b, key)
