@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -25,21 +24,16 @@ func updateBook(c echo.Context) error {
 	return c.JSON(http.StatusOK, db.BooksDB[id])
 }
 
-func createBook(c echo.Context) error {
-	id := uuid.New().String()
-	b := &models.Book{
-		ID: id,
-	}
-	var bodyBytes []byte
-	if c.Request().Body != nil {
-		bodyBytes, _ = ioutil.ReadAll(c.Request().Body)
-	}
+func createBook(c echo.Context) (err error) {
+
+	b := new(models.Book)
 	if err := c.Bind(b); err != nil {
 		return err
 	}
-
+	id := uuid.New().String()
+	b.ID = id
 	db.BooksDB[id] = b
-	return c.JSON(http.StatusCreated, bodyBytes)
+	return c.JSON(http.StatusCreated, b)
 }
 
 func getBook(c echo.Context) error {
