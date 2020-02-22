@@ -28,7 +28,6 @@ func (d *DB) Get(key string) models.Book {
 
 // Put is create func
 func (d *DB) Put(key string, b *models.Book) {
-	id := key
-	d.b[id] = b
+	d.b[key] = b
 	return
 }
