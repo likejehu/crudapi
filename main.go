@@ -14,7 +14,7 @@ import (
 // Handlers
 //----------
 
-func updateBook(c echo.Context) error {
+func updateBook(c echo.Context) (err error) {
 	b := new(models.Book)
 	if err := c.Bind(b); err != nil {
 		return err
@@ -36,12 +36,12 @@ func createBook(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, b)
 }
 
-func getBook(c echo.Context) error {
+func getBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	return c.JSON(http.StatusOK, db.BooksDB[id])
 }
 
-func deleteBook(c echo.Context) error {
+func deleteBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	delete(db.BooksDB, id)
 	return c.NoContent(http.StatusNoContent)
