@@ -1,7 +1,6 @@
 package db
 
 import (
-	"github.com/google/uuid"
 	"github.com/likejehu/crudapi/models"
 )
 
@@ -28,12 +27,8 @@ func (d *DB) Get(key string) models.Book {
 }
 
 // Put is create func
-func (d *DB) Put(value []byte) {
-
-	id := uuid.New().String()
-	b := &models.Book{
-		ID: id,
-	}
+func (d *DB) Put(key string, b *models.Book) {
+	id := key
 	d.b[id] = b
 	return
 }
