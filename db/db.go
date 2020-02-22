@@ -32,3 +32,10 @@ func (d *DB) Put(key string, book *models.Book) {
 	d.b[key] = book
 	return
 }
+
+// Update is update func
+func (d *DB) Update(key string, book *models.Book) (v *models.Book) {
+	d.b[key] = book
+	v = d.b[key]
+	return
+}

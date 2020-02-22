@@ -32,8 +32,7 @@ func UpdateBook(c echo.Context) (err error) {
 		return err
 	}
 	id := c.Param("id")
-	db.BooksDB[id].Title = b.Title
-	return c.JSON(http.StatusOK, db.BooksDB[id])
+	return c.JSON(http.StatusOK, db.Library.Update(id, b))
 }
 
 // CreateBook is for  creating new book
@@ -53,12 +52,12 @@ func CreateBook(c echo.Context) (err error) {
 // GetBook is for  returning book by id
 func GetBook(c echo.Context) (err error) {
 	id := c.Param("id")
-	return c.JSON(http.StatusOK, db.BooksDB[id])
+	return c.JSON(http.StatusOK, db.Library.Get(id))
 }
 
 // DeleteBook is for  deleting book by id
 func DeleteBook(c echo.Context) (err error) {
 	id := c.Param("id")
-	delete(db.BooksDB, id)
+	db.Library.Delete(id)
 	return c.NoContent(http.StatusNoContent)
 }
