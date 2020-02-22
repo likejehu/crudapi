@@ -14,7 +14,3 @@ type Book struct {
 	Rating      uint8     `json:"rating" form:"rating" query:"rating"`
 	Status      string    `json:"status" form:"status" query:"status"`
 }
-
-func main() {
-
-}
