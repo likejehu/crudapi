@@ -27,7 +27,7 @@ func (d *DB) Get(key string) models.Book {
 }
 
 // Put is create func
-func (d *DB) Put(key string, b *models.Book) {
-	d.b[key] = b
+func (d *DB) Put(key string, book *models.Book) {
+	d.b[key] = book
 	return
 }
