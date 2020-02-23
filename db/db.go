@@ -9,8 +9,14 @@ type DB struct {
 	b map[string]*models.Book
 }
 
+func newDB() *DB {
+	var d DB
+	d.b = make(map[string]*models.Book)
+	return &d
+}
+
 // Library is mine library
-var Library = new(DB)
+var Library = newDB()
 
 // Delete is delete func
 func (d *DB) Delete(key string) {
