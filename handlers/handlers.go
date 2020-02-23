@@ -28,10 +28,16 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 // UpdateBook is  for  updating books properties
 func UpdateBook(c echo.Context) (err error) {
 	b := new(models.Book)
+	e := echo.New()
+	e.Validator = &CustomValidator{validator: validator.New()}
 	if err := c.Bind(b); err != nil {
 		return err
 	}
 	id := c.Param("id")
+	if err = c.Validate(b); err != nil {
+		return
+	}
+
 	return c.JSON(http.StatusOK, db.Library.Update(id, b))
 }
 
@@ -44,11 +50,11 @@ func CreateBook(c echo.Context) (err error) {
 	if err := c.Bind(b); err != nil {
 		return err
 	}
+	id := uuid.New().String()
+	b.ID = id
 	if err = c.Validate(b); err != nil {
 		return
 	}
-	id := uuid.New().String()
-	b.ID = id
 
 	db.Library.Put(id, b)
 	return c.JSON(http.StatusCreated, b)
