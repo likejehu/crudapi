@@ -24,7 +24,6 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 //----------
 // Handlers
 //----------
-var e = echo.New()
 
 // UpdateBook is  for  updating books properties
 func UpdateBook(c echo.Context) (err error) {
@@ -39,6 +38,7 @@ func UpdateBook(c echo.Context) (err error) {
 // CreateBook is for  creating new book
 func CreateBook(c echo.Context) (err error) {
 
+	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New()}
 	b := new(models.Book)
 	if err := c.Bind(b); err != nil {
