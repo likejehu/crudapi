@@ -18,7 +18,9 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 }
 func main() {
 	e := echo.New()
+	//create new validator
 	validator := validator.New()
+	//link our custom validator to echo framework
 	e.Validator = &CustomValidator{validator}
 
 	// Middleware
