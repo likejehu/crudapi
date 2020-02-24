@@ -1,7 +1,5 @@
 package models
 
-import "gopkg.in/go-playground/validator.v10"
-
 type (
 	// Book  is mine book representation
 	Book struct {
@@ -14,13 +12,3 @@ type (
 		Status      string `json:"status" form:"status" query:"status" validate:"oneof=CheckedIn, CheckedOut"`
 	}
 )
-
-// CustomValidator is for validation
-type CustomValidator struct {
-	Validator *validator.Validate
-}
-
-// Validate is for validation
-func (cv *CustomValidator) Validate(i interface{}) error {
-	return cv.Validator.Struct(i)
-}
