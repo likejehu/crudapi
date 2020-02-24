@@ -9,16 +9,17 @@ import (
 
 // CustomValidator struct is for storing the custom validator that will be registered to echo server
 type CustomValidator struct {
-	validator *validator.Validate
+	Validator *validator.Validate
 }
 
-// Validate is for validation
+// Validate is struct method that is called by registered validator in echo to validate
 func (cv *CustomValidator) Validate(i interface{}) error {
-	return cv.validator.Struct(i)
+	return cv.Validator.Struct(i)
 }
 func main() {
 	e := echo.New()
-	e.Validator = &CustomValidator{validator: validator.New()}
+	validator := validator.New()
+	e.Validator = &CustomValidator{validator}
 
 	// Middleware
 	e.Use(middleware.Logger())

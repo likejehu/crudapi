@@ -37,8 +37,8 @@ func CreateBook(c echo.Context) (err error) {
 	}
 	id := uuid.New().String()
 	b.ID = id
-	if err = c.Validate(b); err != nil {
-		return
+	if err := c.Validate(b); err != nil {
+		return err
 	}
 
 	db.Library.Put(id, b)
