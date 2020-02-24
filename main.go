@@ -4,10 +4,21 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/likejehu/crudapi/handlers"
+	"gopkg.in/go-playground/validator.v10"
 )
 
+// CustomValidator struct is for storing the custom validator that will be registered to echo server
+type CustomValidator struct {
+	validator *validator.Validate
+}
+
+// Validate is for validation
+func (cv *CustomValidator) Validate(i interface{}) error {
+	return cv.validator.Struct(i)
+}
 func main() {
 	e := echo.New()
+	e.Validator = &CustomValidator{validator: validator.New()}
 
 	// Middleware
 	e.Use(middleware.Logger())

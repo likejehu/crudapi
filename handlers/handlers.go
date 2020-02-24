@@ -3,23 +3,11 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/go-playground/validator"
-
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
 	"github.com/likejehu/crudapi/db"
 	"github.com/likejehu/crudapi/models"
 )
-
-// CustomValidator is mine validator
-type CustomValidator struct {
-	validator *validator.Validate
-}
-
-// Validate is for  validating
-func (cv *CustomValidator) Validate(i interface{}) error {
-	return cv.validator.Struct(i)
-}
 
 //----------
 // Handlers
@@ -28,8 +16,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 // UpdateBook is  for  updating books properties
 func UpdateBook(c echo.Context) (err error) {
 	b := new(models.Book)
-	e := echo.New()
-	e.Validator = &CustomValidator{validator: validator.New()}
+
 	if err := c.Bind(b); err != nil {
 		return err
 	}
@@ -44,8 +31,6 @@ func UpdateBook(c echo.Context) (err error) {
 // CreateBook is for  creating new book
 func CreateBook(c echo.Context) (err error) {
 
-	e := echo.New()
-	e.Validator = &CustomValidator{validator: validator.New()}
 	b := new(models.Book)
 	if err := c.Bind(b); err != nil {
 		return err
