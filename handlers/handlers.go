@@ -21,8 +21,8 @@ func UpdateBook(c echo.Context) (err error) {
 		return err
 	}
 	id := c.Param("id")
-	if err = c.Validate(b); err != nil {
-		return
+	if err := c.Validate(b); err != nil {
+		return err
 	}
 
 	return c.JSON(http.StatusOK, db.Library.Update(id, b))
