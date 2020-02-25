@@ -30,10 +30,10 @@ func (d *DB) Get(key string) models.Book {
 	return v
 }
 
-// Put is create func
-func (d *DB) Put(key string, book *models.Book) {
+// Post is create func
+func (d *DB) Post(key string, book *models.Book) models.Book {
 	d.b[key] = book
-	return
+	return *d.b[key]
 }
 
 // Update is update func
@@ -41,4 +41,10 @@ func (d *DB) Update(key string, book *models.Book) (v *models.Book) {
 	d.b[key] = book
 	v = d.b[key]
 	return
+}
+
+// GetAll is for returning all the books
+func (d *DB) GetAll() map[string]*models.Book {
+
+	return d.b
 }

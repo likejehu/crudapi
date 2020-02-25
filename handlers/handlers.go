@@ -41,8 +41,7 @@ func CreateBook(c echo.Context) (err error) {
 		return err
 	}
 
-	db.Library.Put(id, b)
-	return c.JSON(http.StatusCreated, b)
+	return c.JSON(http.StatusCreated, db.Library.Post(id, b))
 }
 
 // GetBook is for  returning book by id
@@ -56,4 +55,9 @@ func DeleteBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	db.Library.Delete(id)
 	return c.NoContent(http.StatusNoContent)
+}
+
+// GetLibrary is for returning all the books
+func GetLibrary(c echo.Context) (err error) {
+	return c.JSON(http.StatusOK, db.Library.GetAll())
 }
