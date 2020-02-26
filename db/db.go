@@ -45,6 +45,6 @@ func (d *DB) Update(key string, book *models.Book) (v *models.Book) {
 
 // GetAll is for returning all the books
 func (d *DB) GetAll() map[string]*models.Book {
-
-	return d.b
+	books := d.b
+	return books
 }
