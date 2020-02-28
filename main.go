@@ -31,7 +31,7 @@ func main() {
 	e.POST("/books", handlers.CreateBook)
 	e.GET("/books", handlers.GetLibrary)
 	e.GET("/books/:id", handlers.GetBook)
-	e.PUT("/books/:id", handlers.UpdateBook)
+	e.PUT("/books/", handlers.UpdateBook)
 	e.DELETE("/books/:id", handlers.DeleteBook)
 
 	// Start server
