@@ -11,6 +11,7 @@ import (
 
 // Handler is empty struct for handlers
 type Handler struct {
+	db map[string]*models.Book
 }
 
 //----------
@@ -40,7 +41,6 @@ func (h *Handler) CreateBook(c echo.Context) (err error) {
 		return err
 	}
 	id := uuid.New().String()
-	b.ID = id
 	if err := c.Validate(b); err != nil {
 		return err
 	}
