@@ -28,11 +28,12 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	e.POST("/books", handlers.CreateBook)
-	e.GET("/books", handlers.GetLibrary)
-	e.GET("/books/:id", handlers.GetBook)
-	e.PUT("/books/", handlers.UpdateBook)
-	e.DELETE("/books/:id", handlers.DeleteBook)
+	handler := handlers.Handler{}
+	e.POST("/books", handler.CreateBook)
+	e.GET("/books", handler.GetLibrary)
+	e.GET("/books/:id", handler.GetBook)
+	e.PUT("/books/", handler.UpdateBook)
+	e.DELETE("/books/:id", handler.DeleteBook)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8080"))

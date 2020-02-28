@@ -9,12 +9,16 @@ import (
 	"github.com/likejehu/crudapi/models"
 )
 
+// Handler is empty struct for handlers
+type Handler struct {
+}
+
 //----------
 // Handlers
 //----------
 
 // UpdateBook is  for  updating books properties
-func UpdateBook(c echo.Context) (err error) {
+func (h *Handler) UpdateBook(c echo.Context) (err error) {
 	b := new(models.Book)
 
 	if err := c.Bind(b); err != nil {
@@ -29,7 +33,7 @@ func UpdateBook(c echo.Context) (err error) {
 }
 
 // CreateBook is for  creating new book
-func CreateBook(c echo.Context) (err error) {
+func (h *Handler) CreateBook(c echo.Context) (err error) {
 
 	b := new(models.Book)
 	if err := c.Bind(b); err != nil {
@@ -45,19 +49,19 @@ func CreateBook(c echo.Context) (err error) {
 }
 
 // GetBook is for  returning book by id
-func GetBook(c echo.Context) (err error) {
+func (h *Handler) GetBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	return c.JSON(http.StatusOK, db.Library.Get(id))
 }
 
 // DeleteBook is for  deleting book by id
-func DeleteBook(c echo.Context) (err error) {
+func (h *Handler) DeleteBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	db.Library.Delete(id)
 	return c.NoContent(http.StatusNoContent)
 }
 
 // GetLibrary is for returning all the books
-func GetLibrary(c echo.Context) (err error) {
+func (h *Handler) GetLibrary(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, db.Library.GetAll())
 }
