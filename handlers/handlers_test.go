@@ -40,7 +40,7 @@ func (cv *customValidator) Validate(i interface{}) error {
 	return cv.Validator.Struct(i)
 }
 
-func TestCreateBook(t *testing.T) {
+func TestCreateBooksuccess(t *testing.T) {
 	//setup
 
 	e := echo.New()
