@@ -40,7 +40,7 @@ func (cv *customValidator) Validate(i interface{}) error {
 	return cv.Validator.Struct(i)
 }
 
-func TestCreateBooksuccess(t *testing.T) {
+func TestCreateBook(t *testing.T) {
 	//setup
 
 	e := echo.New()
@@ -58,4 +58,21 @@ func TestCreateBooksuccess(t *testing.T) {
 		assert.Equal(t, bookJSON, rec.Body.String())
 	}
 
+}
+func TestGetBook(t *testing.T) {
+	// Setup
+	e := echo.New()
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	c.SetPath("/books/:id")
+	c.SetParamNames("id")
+	c.SetParamValues("80369cc7-41af-48a0-be9e-a71377bcb337")
+	h := &Handler{mockDB}
+
+	// Assertions
+	if assert.NoError(t, h.GetBook(c)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, bookJSON, rec.Body.String())
+	}
 }
