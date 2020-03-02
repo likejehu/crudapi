@@ -62,6 +62,8 @@ func TestCreateBook(t *testing.T) {
 func TestGetBook(t *testing.T) {
 	// Setup
 	e := echo.New()
+	e.MaxParam(5)
+
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)

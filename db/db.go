@@ -25,8 +25,8 @@ func (d *DB) Delete(key string) {
 }
 
 // Get is read func
-func (d *DB) Get(key string) models.Book {
-	v := *d.b[key]
+func (d *DB) Get(key string) *models.Book {
+	v := d.b[key]
 	return v
 }
 
