@@ -5,13 +5,12 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
-	"github.com/likejehu/crudapi/db"
 	"github.com/likejehu/crudapi/models"
 )
 
 // Handler is empty struct for handlers
 type Handler struct {
-	db map[string]*models.Book
+	Bookmap map[string]*models.Book
 }
 
 //----------
@@ -21,7 +20,6 @@ type Handler struct {
 // UpdateBook is  for  updating books properties
 func (h *Handler) UpdateBook(c echo.Context) (err error) {
 	b := new(models.Book)
-
 	if err := c.Bind(b); err != nil {
 		return err
 	}
@@ -29,13 +27,13 @@ func (h *Handler) UpdateBook(c echo.Context) (err error) {
 	if err := c.Validate(b); err != nil {
 		return err
 	}
-
-	return c.JSON(http.StatusOK, db.Library.Update(id, b))
+	h.Bookmap[id] = b
+	newbook := h.Bookmap[id]
+	return c.JSON(http.StatusOK, newbook)
 }
 
 // CreateBook is for  creating new book
 func (h *Handler) CreateBook(c echo.Context) (err error) {
-
 	b := new(models.Book)
 	if err := c.Bind(b); err != nil {
 		return err
@@ -44,24 +42,28 @@ func (h *Handler) CreateBook(c echo.Context) (err error) {
 	if err := c.Validate(b); err != nil {
 		return err
 	}
-
-	return c.JSON(http.StatusCreated, db.Library.Post(id, b))
+	h.Bookmap[id] = b
+	return c.JSON(http.StatusCreated, b)
 }
 
 // GetBook is for  returning book by id
 func (h *Handler) GetBook(c echo.Context) (err error) {
 	id := c.Param("id")
-	return c.JSON(http.StatusOK, db.Library.Get(id))
+	book := h.Bookmap[id]
+	if book == nil {
+		return echo.NewHTTPError(http.StatusNotFound, "book not found")
+	}
+	return c.JSON(http.StatusOK, book)
 }
 
 // DeleteBook is for  deleting book by id
 func (h *Handler) DeleteBook(c echo.Context) (err error) {
 	id := c.Param("id")
-	db.Library.Delete(id)
+	delete(h.Bookmap, id)
 	return c.NoContent(http.StatusNoContent)
 }
 
 // GetLibrary is for returning all the books
 func (h *Handler) GetLibrary(c echo.Context) (err error) {
-	return c.JSON(http.StatusOK, db.Library.GetAll())
+	return c.JSON(http.StatusOK, h.Bookmap)
 }

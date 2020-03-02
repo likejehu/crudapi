@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/likejehu/crudapi/db"
 	"github.com/likejehu/crudapi/handlers"
 	"gopkg.in/go-playground/validator.v10"
 )
@@ -28,7 +29,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	handler := handlers.Handler{}
+	handler := handlers.Handler{db.Library.B}
 	e.POST("/books", handler.CreateBook)
 	e.GET("/books", handler.GetLibrary)
 	e.GET("/books/:id", handler.GetBook)
