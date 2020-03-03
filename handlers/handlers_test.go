@@ -7,28 +7,13 @@ import (
 	"testing"
 
 	"github.com/labstack/echo"
+	"github.com/likejehu/crudapi/db"
 	"github.com/likejehu/crudapi/models"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/go-playground/validator.v10"
 )
 
-/*
-var mockBook = models.Book{
-	Title:       "Super Kniga",
-	Author:      "Igor",
-	Publisher:   "Superizdatel",
-	PublishDate: "2020-02-02",
-	Rating:      2,
-	Status:      "CheckedOut",
-}
-
-var bookBytes, _ = json.Marshal(mockBook)
-var bookJSON = string(bookBytes)
-*/
-var mockDB = map[string]*models.Book{
-	"80369cc7-41af-48a0-be9e-a71377bcb337": &models.Book{"SUper kniga", "Igor", "Superizdatel", "2020-02-02", 3, "CheckedIn"},
-}
-
+var mockDB = db.NewDB()
 var bookJSON = `{"title":"SUper kniga","author":"Igor","publisher":"Superizdatel","date":"2020-02-02","rating":3,"status":"CheckedIn"}
 `
 
@@ -69,6 +54,10 @@ func TestGetBook(t *testing.T) {
 	c.SetPath("/books/:id")
 	c.SetParamNames("id")
 	c.SetParamValues("80369cc7-41af-48a0-be9e-a71377bcb337")
+	mockDB.B = map[string]*models.Book{
+		"80369cc7-41af-48a0-be9e-a71377bcb337": &models.Book{"SUper kniga", "Igor", "Superizdatel", "2020-02-02", 3, "CheckedIn"},
+	}
+
 	h := &Handler{mockDB}
 
 	// Assertions

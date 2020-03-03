@@ -8,9 +8,18 @@ import (
 	"github.com/likejehu/crudapi/models"
 )
 
+//Bookdatabase is mine interface for any (real and mock) datastorage for books
+type Bookdatabase interface {
+	Delete(key string)
+	Get(key string) *models.Book
+	Post(key string, book *models.Book) models.Book
+	Update(key string, book *models.Book) *models.Book
+	GetAll() map[string]*models.Book
+}
+
 // Handler is empty struct for handlers
 type Handler struct {
-	Bookmap map[string]*models.Book
+	Bookmap Bookdatabase
 }
 
 //----------
@@ -27,9 +36,7 @@ func (h *Handler) UpdateBook(c echo.Context) (err error) {
 	if err := c.Validate(b); err != nil {
 		return err
 	}
-	h.Bookmap[id] = b
-	newbook := h.Bookmap[id]
-	return c.JSON(http.StatusOK, newbook)
+	return c.JSON(http.StatusOK, h.Bookmap.Update(id, b))
 }
 
 // CreateBook is for  creating new book
@@ -42,14 +49,14 @@ func (h *Handler) CreateBook(c echo.Context) (err error) {
 	if err := c.Validate(b); err != nil {
 		return err
 	}
-	h.Bookmap[id] = b
+	h.Bookmap.Post(id, b)
 	return c.JSON(http.StatusCreated, b)
 }
 
 // GetBook is for  returning book by id
 func (h *Handler) GetBook(c echo.Context) (err error) {
 	id := c.Param("id")
-	book := h.Bookmap[id]
+	book := h.Bookmap.Get(id)
 	if book == nil {
 		return echo.NewHTTPError(http.StatusNotFound, "book not found")
 	}
@@ -59,11 +66,12 @@ func (h *Handler) GetBook(c echo.Context) (err error) {
 // DeleteBook is for  deleting book by id
 func (h *Handler) DeleteBook(c echo.Context) (err error) {
 	id := c.Param("id")
-	delete(h.Bookmap, id)
+	h.Bookmap.Delete(id)
 	return c.NoContent(http.StatusNoContent)
 }
 
 // GetLibrary is for returning all the books
 func (h *Handler) GetLibrary(c echo.Context) (err error) {
-	return c.JSON(http.StatusOK, h.Bookmap)
+
+	return c.JSON(http.StatusOK, h.Bookmap.GetAll())
 }

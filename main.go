@@ -29,7 +29,7 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Routes
-	handler := handlers.Handler{db.Library.B}
+	handler := handlers.Handler{db.Library}
 	e.POST("/books", handler.CreateBook)
 	e.GET("/books", handler.GetLibrary)
 	e.GET("/books/:id", handler.GetBook)
