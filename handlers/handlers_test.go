@@ -104,3 +104,25 @@ func TestGetBook(t *testing.T) {
 		assert.Equal(t, bookJSON, rec.Body.String())
 	}
 }
+
+func TestDeleteBook(t *testing.T) {
+	// Setup
+	e := echo.New()
+	e.MaxParam(5)
+	req := httptest.NewRequest(http.MethodDelete, "/", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	c.SetPath("/books/:id")
+	c.SetParamNames("id")
+	c.SetParamValues("80369cc7-41af-48a0-be9e-a71377bcb337")
+	mockDB.B = map[string]*models.Book{
+		"80369cc7-41af-48a0-be9e-a71377bcb337": &models.Book{"SUper kniga", "Igor", "Superizdatel", "2020-02-02", 3, "CheckedIn"},
+	}
+	h := &Handler{mockDB}
+	exp := ""
+	// Assertions
+	if assert.NoError(t, h.DeleteBook(c)) {
+		assert.Equal(t, http.StatusNoContent, rec.Code)
+		assert.Equal(t, exp, rec.Body.String())
+	}
+}
