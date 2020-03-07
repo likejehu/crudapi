@@ -9,11 +9,17 @@ import (
 	"github.com/labstack/echo"
 	"github.com/likejehu/crudapi/models"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"gopkg.in/go-playground/validator.v10"
 )
 
 type mockingDB struct {
 	B map[string]*models.Book
+}
+
+// MyMockedDB is mock db
+type MyMockedDB struct {
+	mock.Mock
 }
 
 // Delete is delete func
