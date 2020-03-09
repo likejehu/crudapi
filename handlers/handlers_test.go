@@ -7,19 +7,14 @@ import (
 	"testing"
 
 	"github.com/labstack/echo"
+	"github.com/likejehu/crudapi/handlers/mocks"
 	"github.com/likejehu/crudapi/models"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"gopkg.in/go-playground/validator.v10"
 )
 
 type mockingDB struct {
 	B map[string]*models.Book
-}
-
-// MyMockedDB is mock db
-type MyMockedDB struct {
-	mock.Mock
 }
 
 // Delete is delete func
@@ -68,6 +63,23 @@ type customValidator struct {
 
 func (cv *customValidator) Validate(i interface{}) error {
 	return cv.Validator.Struct(i)
+}
+
+func TestCreateBookWithTestifyMock(t *testing.T) {
+	e := echo.New()
+	validator := validator.New()
+	e.Validator = &customValidator{validator}
+	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(bookJSON))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	mockBookdatabase := &mocks.Bookdatabase{}
+	h := &Handler{Bookmap: mockBookdatabase}
+
+	// Expect СreateBook to be called once with c" as parameter, and return bookJSON) from the mocked call.
+	mockBookdatabase.On("СreateBook", c).Return(bookJSON).Once()
+	h.CreateBook(c)
+	mockBookdatabase.AssertExpectations(t)
 }
 
 func TestCreateBook(t *testing.T) {
