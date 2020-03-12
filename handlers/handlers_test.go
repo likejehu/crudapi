@@ -81,3 +81,19 @@ func TestDeleteBookwithMockery(t *testing.T) {
 	assert.Equal(t, exp, rec.Body.String())
 
 }
+
+func TestGetLibrarywithMockery(t *testing.T) {
+	//setup
+	e := echo.New()
+	e.MaxParam(5)
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	mockBookdatabase := &mocks.Bookdatabase{}
+	h := &Handler{mockBookdatabase}
+	mockBookdatabase.On("GetAll").Return(map[string]*models.Book{})
+	h.GetLibrary(c)
+	mockBookdatabase.AssertExpectations(t)
+	// Assertions
+	assert.Equal(t, http.StatusOK, rec.Code)
+}
