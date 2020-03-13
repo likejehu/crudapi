@@ -97,3 +97,23 @@ func TestGetLibrarywithMockery(t *testing.T) {
 	// Assertions
 	assert.Equal(t, http.StatusOK, rec.Code)
 }
+
+func TestUpdateBookwithMockery(t *testing.T) {
+	//setup
+	e := echo.New()
+	e.MaxParam(5)
+	validator := validator.New()
+	e.Validator = &customValidator{validator}
+	req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(bookJSON))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	mockBookdatabase := &mocks.Bookdatabase{}
+	h := &Handler{mockBookdatabase}
+	mockBookdatabase.On("Update", mock.Anything, &models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"}).Return(&models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"})
+	h.UpdateBook(c)
+	mockBookdatabase.AssertExpectations(t)
+	// Assertions
+	assert.Equal(t, http.StatusOK, rec.Code)
+	assert.Equal(t, bookJSON, rec.Body.String())
+}
