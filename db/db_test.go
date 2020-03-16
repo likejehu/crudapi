@@ -22,5 +22,10 @@ func TestNewDB(t *testing.T) {
 	}
 }
 func TestDelete(t *testing.T) {
-
+	testDB.B = mb
+	testDB.Delete("02")
+	sv := testDB.B["02"]
+	if sv != nil {
+		t.Errorf("second value = %v; want  zero value", sv)
+	}
 }
