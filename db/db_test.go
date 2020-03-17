@@ -29,3 +29,11 @@ func TestDelete(t *testing.T) {
 		t.Errorf("second value = %v; want  zero value", sv)
 	}
 }
+
+func TestGet(t *testing.T) {
+	testDB.B = mb
+	sv := testDB.Get("02")
+	if sv != testDB.B["02"] {
+		t.Errorf("second value = %v; want  Novie priklyucheniya Igorya", sv)
+	}
+}
