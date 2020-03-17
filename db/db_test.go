@@ -14,6 +14,8 @@ var mb = map[string]*models.Book{
 	"03": &models.Book{Title: "Supernovie priklyucheniya Igorya", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"},
 }
 
+var tb = &models.Book{Title: "Super kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"}
+
 func TestNewDB(t *testing.T) {
 	var i interface{} = NewDB()
 	d, ok := i.(*DB)
@@ -36,4 +38,13 @@ func TestGet(t *testing.T) {
 	if sv != testDB.B["02"] {
 		t.Errorf("second value = %v; want  Novie priklyucheniya Igorya", sv)
 	}
+}
+
+func TestPost(t *testing.T) {
+	testDB.B = mb
+	fv := testDB.Post("04", tb)
+	if fv != *tb {
+		t.Errorf("4th value = %v; want  Super kniga", fv)
+	}
+
 }
