@@ -46,5 +46,12 @@ func TestPost(t *testing.T) {
 	if fv != *tb {
 		t.Errorf("4th value = %v; want  Super kniga", fv)
 	}
+}
 
+func TestUpdate(t *testing.T) {
+	testDB.B = mb
+	sv := testDB.Update("02", tb)
+	if sv != tb {
+		t.Errorf("second value = %v; want  Super kniga", sv)
+	}
 }
