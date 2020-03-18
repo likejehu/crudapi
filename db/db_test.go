@@ -1,6 +1,7 @@
 package db
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/likejehu/crudapi/models"
@@ -53,5 +54,14 @@ func TestUpdate(t *testing.T) {
 	sv := testDB.Update("02", tb)
 	if sv != tb {
 		t.Errorf("second value = %v; want  Super kniga", sv)
+	}
+}
+
+func TestGetAll(t *testing.T) {
+	testDB.B = mb
+	r := testDB.GetAll()
+	c := reflect.DeepEqual(r, mb)
+	if c != true {
+		t.Errorf("second value = %v; want  %v", r, mb)
 	}
 }
