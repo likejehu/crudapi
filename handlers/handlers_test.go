@@ -28,7 +28,7 @@ func (cv *customValidator) Validate(i interface{}) error {
 
 func TestCreateBookwithMockery(t *testing.T) {
 	mockBookdatabase := &mocks.Bookdatabase{}
-	mockBookdatabase.On("Post", mock.Anything, testBook).Return(models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"})
+	mockBookdatabase.On("Post", mock.Anything, testBook).Return(*testBook)
 	h := &Handler{mockBookdatabase}
 	e := echo.New()
 	validator := validator.New()
