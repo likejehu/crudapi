@@ -16,6 +16,7 @@ import (
 
 var bookJSON = `{"title":"SUper kniga","author":"Igor","publisher":"Superizdatel","date":"2020-02-02","rating":3,"status":"CheckedIn"}
 `
+var testBook = &models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"}
 
 type customValidator struct {
 	Validator *validator.Validate
@@ -27,7 +28,7 @@ func (cv *customValidator) Validate(i interface{}) error {
 
 func TestCreateBookwithMockery(t *testing.T) {
 	mockBookdatabase := &mocks.Bookdatabase{}
-	mockBookdatabase.On("Post", mock.Anything, &models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"}).Return(models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"})
+	mockBookdatabase.On("Post", mock.Anything, testBook).Return(models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"})
 	h := &Handler{mockBookdatabase}
 	e := echo.New()
 	validator := validator.New()
@@ -43,6 +44,25 @@ func TestCreateBookwithMockery(t *testing.T) {
 	assert.Equal(t, bookJSON, rec.Body.String())
 }
 
+func TestCreateBook(t *testing.T) {
+	tests := map[string]struct {
+		storageErr error
+		response   string
+		err        error
+	}{
+		"successful": {
+			storageErr: nil,
+			response:   "pong",
+			err:        nil,
+		},
+		"with  error": {
+			storageErr: nil,
+			response:   "",
+			err:        nil,
+		},
+	}
+	println(tests)
+}
 func TestGetBookwithMockery(t *testing.T) {
 	//setup
 	e := echo.New()

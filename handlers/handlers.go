@@ -75,6 +75,5 @@ func (h *Handler) DeleteBook(c echo.Context) (err error) {
 
 // GetLibrary is for returning all the books
 func (h *Handler) GetLibrary(c echo.Context) (err error) {
-
 	return c.JSON(http.StatusOK, h.Bookmap.GetAll())
 }
