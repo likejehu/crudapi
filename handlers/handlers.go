@@ -59,8 +59,14 @@ func (h *Handler) UpdateBook(c echo.Context) (err error) {
 		return err
 	}
 	id := c.Param("id")
+	if id == "" {
+		return echo.NewHTTPError(http.StatusBadRequest, "id can't be blank")
+	}
 	if err := c.Validate(b); err != nil {
-		return err
+		for _, fieldErr := range err.(validator.ValidationErrors) {
+			c.JSON(http.StatusBadRequest, fieldError{fieldErr}.String())
+			return err
+		}
 	}
 	return c.JSON(http.StatusOK, h.Bookmap.Update(id, b))
 }
@@ -73,7 +79,10 @@ func (h *Handler) CreateBook(c echo.Context) (err error) {
 	}
 	id := uuid.New().String()
 	if err := c.Validate(b); err != nil {
-		return err
+		for _, fieldErr := range err.(validator.ValidationErrors) {
+			c.JSON(http.StatusBadRequest, fieldError{fieldErr}.String())
+			return err
+		}
 	}
 	h.Bookmap.Post(id, b)
 	return c.JSON(http.StatusCreated, b)
