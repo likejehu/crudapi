@@ -59,9 +59,6 @@ func (h *Handler) UpdateBook(c echo.Context) (err error) {
 		return err
 	}
 	id := c.Param("id")
-	if id == "" {
-		return echo.NewHTTPError(http.StatusBadRequest, "id can't be blank")
-	}
 	if err := c.Validate(b); err != nil {
 		for _, fieldErr := range err.(validator.ValidationErrors) {
 			c.JSON(http.StatusBadRequest, fieldError{fieldErr}.String())

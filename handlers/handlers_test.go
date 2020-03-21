@@ -45,6 +45,7 @@ func TestCreateBookwithMockery(t *testing.T) {
 }
 
 func TestCreateBook(t *testing.T) {
+	//test cases
 	tests := map[string]struct {
 		storageErr error
 		response   string
@@ -61,6 +62,7 @@ func TestCreateBook(t *testing.T) {
 			err:        nil,
 		},
 	}
+
 	println(tests)
 }
 func TestGetBookwithMockery(t *testing.T) {
@@ -72,7 +74,7 @@ func TestGetBookwithMockery(t *testing.T) {
 	c := e.NewContext(req, rec)
 	mockBookdatabase := &mocks.Bookdatabase{}
 	h := &Handler{mockBookdatabase}
-	mockBookdatabase.On("Get", mock.Anything).Return(&models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"})
+	mockBookdatabase.On("Get", mock.Anything).Return(testBook)
 	h.GetBook(c)
 	mockBookdatabase.AssertExpectations(t)
 	// Assertions
@@ -130,7 +132,7 @@ func TestUpdateBookwithMockery(t *testing.T) {
 	c := e.NewContext(req, rec)
 	mockBookdatabase := &mocks.Bookdatabase{}
 	h := &Handler{mockBookdatabase}
-	mockBookdatabase.On("Update", mock.Anything, &models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"}).Return(&models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"})
+	mockBookdatabase.On("Update", mock.Anything, testBook).Return(testBook)
 	h.UpdateBook(c)
 	mockBookdatabase.AssertExpectations(t)
 	// Assertions
