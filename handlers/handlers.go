@@ -77,8 +77,7 @@ func (h *Handler) CreateBook(c echo.Context) (err error) {
 	id := uuid.New().String()
 	if err := c.Validate(b); err != nil {
 		for _, fieldErr := range err.(validator.ValidationErrors) {
-			c.JSON(http.StatusBadRequest, fieldError{fieldErr}.String())
-			return err
+			return c.JSON(http.StatusBadRequest, fieldError{fieldErr}.String())
 		}
 	}
 	h.Bookmap.Post(id, b)
