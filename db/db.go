@@ -21,6 +21,9 @@ func NewDB() *DB {
 // Library is mine library
 var Library = NewDB()
 
+// ErrorNotFound is 404 err for db, when key is not found
+var ErrorNotFound = errors.New("key not found")
+
 // Delete is delete func
 func (d *DB) Delete(key string) {
 	delete(d.B, key)
@@ -32,7 +35,7 @@ func (d *DB) Get(key string) (*models.Book, error) {
 	if book, ok := d.B[key]; ok {
 		return book, nil
 	}
-	err := errors.New("key not found")
+	err := ErrorNotFound
 	return nil, err
 
 }

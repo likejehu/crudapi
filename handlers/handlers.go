@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
+	"github.com/likejehu/crudapi/db"
 	"github.com/likejehu/crudapi/models"
 	"gopkg.in/go-playground/validator.v10"
 )
@@ -87,7 +88,7 @@ func (h *Handler) CreateBook(c echo.Context) (err error) {
 func (h *Handler) GetBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	book, err := h.Bookmap.Get(id)
-	if book == nil {
+	if err == db.ErrorNotFound {
 		return echo.NewHTTPError(http.StatusNotFound, "book not found")
 	}
 	return c.JSON(http.StatusOK, book)
