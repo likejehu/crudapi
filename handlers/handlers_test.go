@@ -66,7 +66,7 @@ func TestCreateBook(t *testing.T) {
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
 	})
 }
-func TestGetBookwithMockery(t *testing.T) {
+func TestGetBook(t *testing.T) {
 	//setup
 	e := echo.New()
 	e.MaxParam(5)
@@ -83,7 +83,7 @@ func TestGetBookwithMockery(t *testing.T) {
 	assert.Equal(t, bookJSON, rec.Body.String())
 }
 
-func TestDeleteBookwithMockery(t *testing.T) {
+func TestDeleteBook(t *testing.T) {
 	//setup
 	e := echo.New()
 	e.MaxParam(5)
@@ -105,7 +105,7 @@ func TestDeleteBookwithMockery(t *testing.T) {
 
 }
 
-func TestGetLibrarywithMockery(t *testing.T) {
+func TestGetLibrary(t *testing.T) {
 	//setup
 	e := echo.New()
 	e.MaxParam(5)
@@ -121,7 +121,7 @@ func TestGetLibrarywithMockery(t *testing.T) {
 	assert.Equal(t, http.StatusOK, rec.Code)
 }
 
-func TestUpdateBookwithMockery(t *testing.T) {
+func TestUpdateBook(t *testing.T) {
 	//setup
 	e := echo.New()
 	e.MaxParam(5)

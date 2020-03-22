@@ -1,6 +1,8 @@
 package db
 
 import (
+	"errors"
+
 	"github.com/likejehu/crudapi/models"
 )
 
@@ -26,9 +28,13 @@ func (d *DB) Delete(key string) {
 }
 
 // Get is read func
-func (d *DB) Get(key string) *models.Book {
-	book := d.B[key]
-	return book
+func (d *DB) Get(key string) (*models.Book, error) {
+	if book, ok := d.B[key]; ok {
+		return book, nil
+	}
+	err := errors.New("key not found")
+	return nil, err
+
 }
 
 // Post is create func

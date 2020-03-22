@@ -14,7 +14,7 @@ import (
 //Bookdatabase is mine interface for any (real and mock) datastorage for books
 type Bookdatabase interface {
 	Delete(key string)
-	Get(key string) *models.Book
+	Get(key string) (*models.Book, error)
 	Post(key string, book *models.Book) models.Book
 	Update(key string, book *models.Book) *models.Book
 	GetAll() map[string]*models.Book
@@ -61,8 +61,7 @@ func (h *Handler) UpdateBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	if err := c.Validate(b); err != nil {
 		for _, fieldErr := range err.(validator.ValidationErrors) {
-			c.JSON(http.StatusBadRequest, fieldError{fieldErr}.String())
-			return err
+			return c.JSON(http.StatusBadRequest, fieldError{fieldErr}.String())
 		}
 	}
 	return c.JSON(http.StatusOK, h.Bookmap.Update(id, b))
@@ -87,7 +86,7 @@ func (h *Handler) CreateBook(c echo.Context) (err error) {
 // GetBook is for  returning book by id
 func (h *Handler) GetBook(c echo.Context) (err error) {
 	id := c.Param("id")
-	book := h.Bookmap.Get(id)
+	book, err := h.Bookmap.Get(id)
 	if book == nil {
 		return echo.NewHTTPError(http.StatusNotFound, "book not found")
 	}
