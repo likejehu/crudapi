@@ -13,11 +13,6 @@ type CustomValidator struct {
 	Validator *validator.Validate
 }
 
-// fieldError is for  custom validation message
-type fieldError struct {
-	err validator.FieldError
-}
-
 // Validate is struct method that is called by registered validator in echo to validate
 func (cv *CustomValidator) Validate(i interface{}) error {
 	return cv.Validator.Struct(i)

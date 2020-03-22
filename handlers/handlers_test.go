@@ -45,25 +45,24 @@ func TestCreateBookwithMockery(t *testing.T) {
 }
 
 func TestCreateBook(t *testing.T) {
-	//test cases
-	tests := map[string]struct {
-		storageErr error
-		response   string
-		err        error
-	}{
-		"successful": {
-			storageErr: nil,
-			response:   "pong",
-			err:        nil,
-		},
-		"with  error": {
-			storageErr: nil,
-			response:   "",
-			err:        nil,
-		},
-	}
+	t.Run("succes case", func(t *testing.T) {
 
-	println(tests)
+		e := echo.New()
+		validator := validator.New()
+		e.Validator = &customValidator{validator}
+		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(bookJSON))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		mockBookdatabase := &mocks.Bookdatabase{}
+		h := &Handler{mockBookdatabase}
+		mockBookdatabase.On("Post", mock.Anything, testBook).Return(*testBook)
+		h.CreateBook(c)
+		mockBookdatabase.AssertExpectations(t)
+		// Assertions
+		assert.Equal(t, http.StatusCreated, rec.Code)
+		assert.Equal(t, bookJSON, rec.Body.String())
+	})
 }
 func TestGetBookwithMockery(t *testing.T) {
 	//setup
