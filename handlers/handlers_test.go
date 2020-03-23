@@ -75,7 +75,7 @@ func TestGetBook(t *testing.T) {
 	c := e.NewContext(req, rec)
 	mockBookdatabase := &mocks.Bookdatabase{}
 	h := &Handler{mockBookdatabase}
-	mockBookdatabase.On("Get", mock.Anything).Return(testBook)
+	mockBookdatabase.On("Get", mock.Anything).Return(testBook, nil)
 	h.GetBook(c)
 	mockBookdatabase.AssertExpectations(t)
 	// Assertions
@@ -96,7 +96,7 @@ func TestDeleteBook(t *testing.T) {
 	c.SetParamNames("id")
 	c.SetParamValues("80369cc7-41af-48a0-be9e-a71377bcb337")
 	exp := ""
-	mockBookdatabase.On("Delete", mock.Anything).Return(exp)
+	mockBookdatabase.On("Delete", mock.Anything).Return(nil)
 	h.DeleteBook(c)
 	mockBookdatabase.AssertExpectations(t)
 	// Assertions
@@ -133,7 +133,7 @@ func TestUpdateBook(t *testing.T) {
 	c := e.NewContext(req, rec)
 	mockBookdatabase := &mocks.Bookdatabase{}
 	h := &Handler{mockBookdatabase}
-	mockBookdatabase.On("Update", mock.Anything, testBook).Return(testBook)
+	mockBookdatabase.On("Update", mock.Anything, testBook).Return(testBook, nil)
 	h.UpdateBook(c)
 	mockBookdatabase.AssertExpectations(t)
 	// Assertions
