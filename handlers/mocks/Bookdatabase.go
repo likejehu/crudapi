@@ -13,12 +13,21 @@ type Bookdatabase struct {
 }
 
 // Delete provides a mock function with given fields: key
-func (_m *Bookdatabase) Delete(key string) {
-	_m.Called(key)
+func (_m *Bookdatabase) Delete(key string) error {
+	ret := _m.Called(key)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string) error); ok {
+		r0 = rf(key)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 // Get provides a mock function with given fields: key
-func (_m *Bookdatabase) Get(key string) *models.Book {
+func (_m *Bookdatabase) Get(key string) (*models.Book, error) {
 	ret := _m.Called(key)
 
 	var r0 *models.Book
@@ -30,7 +39,14 @@ func (_m *Bookdatabase) Get(key string) *models.Book {
 		}
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(key)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetAll provides a mock function with given fields:
@@ -64,7 +80,7 @@ func (_m *Bookdatabase) Post(key string, book *models.Book) models.Book {
 }
 
 // Update provides a mock function with given fields: key, book
-func (_m *Bookdatabase) Update(key string, book *models.Book) *models.Book {
+func (_m *Bookdatabase) Update(key string, book *models.Book) (*models.Book, error) {
 	ret := _m.Called(key, book)
 
 	var r0 *models.Book
@@ -76,5 +92,12 @@ func (_m *Bookdatabase) Update(key string, book *models.Book) *models.Book {
 		}
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, *models.Book) error); ok {
+		r1 = rf(key, book)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }

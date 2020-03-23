@@ -14,10 +14,10 @@ import (
 
 //Bookdatabase is mine interface for any (real and mock) datastorage for books
 type Bookdatabase interface {
-	Delete(key string)
+	Delete(key string) error
 	Get(key string) (*models.Book, error)
 	Post(key string, book *models.Book) models.Book
-	Update(key string, book *models.Book) *models.Book
+	Update(key string, book *models.Book) (*models.Book, error)
 	GetAll() map[string]*models.Book
 }
 
@@ -65,7 +65,11 @@ func (h *Handler) UpdateBook(c echo.Context) (err error) {
 			return c.JSON(http.StatusBadRequest, fieldError{fieldErr}.String())
 		}
 	}
-	return c.JSON(http.StatusOK, h.Bookmap.Update(id, b))
+	_, e := h.Bookmap.Update(id, b)
+	if e == db.ErrorNotFound {
+		return echo.NewHTTPError(http.StatusNotFound, "book not found")
+	}
+	return c.JSON(http.StatusOK, b)
 }
 
 // CreateBook is for  creating new book
