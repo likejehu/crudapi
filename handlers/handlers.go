@@ -101,10 +101,10 @@ func (h *Handler) GetBook(c echo.Context) (err error) {
 // DeleteBook is for  deleting book by id
 func (h *Handler) DeleteBook(c echo.Context) (err error) {
 	id := c.Param("id")
-	if id == "" {
+	err = h.Bookmap.Delete(id)
+	if err == db.ErrorNotFound {
 		return c.JSON(http.StatusNotFound, "book not found")
 	}
-	h.Bookmap.Delete(id)
 	return c.NoContent(http.StatusNoContent)
 }
 

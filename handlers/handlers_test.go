@@ -106,24 +106,47 @@ func TestGetBook(t *testing.T) {
 }
 
 func TestDeleteBook(t *testing.T) {
-	//setup
-	e := echo.New()
-	e.MaxParam(5)
-	req := httptest.NewRequest(http.MethodDelete, "/", nil)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	mockBookdatabase := &mocks.Bookdatabase{}
-	h := &Handler{mockBookdatabase}
-	c.SetPath("/books/:id")
-	c.SetParamNames("id")
-	c.SetParamValues("80369cc7-41af-48a0-be9e-a71377bcb337")
-	exp := ""
-	mockBookdatabase.On("Delete", mock.Anything).Return(nil)
-	h.DeleteBook(c)
-	mockBookdatabase.AssertExpectations(t)
-	// Assertions
-	assert.Equal(t, http.StatusNoContent, rec.Code)
-	assert.Equal(t, exp, rec.Body.String())
+
+	t.Run("succes case", func(t *testing.T) {
+		//setup
+		e := echo.New()
+		e.MaxParam(5)
+		req := httptest.NewRequest(http.MethodDelete, "/", nil)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		mockBookdatabase := &mocks.Bookdatabase{}
+		h := &Handler{mockBookdatabase}
+		c.SetPath("/books/:id")
+		c.SetParamNames("id")
+		c.SetParamValues("80369cc7-41af-48a0-be9e-a71377bcb337")
+		exp := ""
+		mockBookdatabase.On("Delete", mock.Anything).Return(nil)
+		h.DeleteBook(c)
+		mockBookdatabase.AssertExpectations(t)
+		// Assertions
+		assert.Equal(t, http.StatusNoContent, rec.Code)
+		assert.Equal(t, exp, rec.Body.String())
+	})
+
+	t.Run("book not found", func(t *testing.T) {
+		//setup
+		e := echo.New()
+		e.MaxParam(5)
+		req := httptest.NewRequest(http.MethodDelete, "/", nil)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		mockBookdatabase := &mocks.Bookdatabase{}
+		h := &Handler{mockBookdatabase}
+		c.SetPath("/books/:id")
+		c.SetParamNames("id")
+		c.SetParamValues("80369cc7-41af-48a0-be9e-a71377bcb337")
+		mockBookdatabase.On("Delete", mock.Anything).Return(err)
+		h.DeleteBook(c)
+		mockBookdatabase.AssertExpectations(t)
+		// Assertions
+		assert.Equal(t, "\"book not found\"\n", rec.Body.String())
+		assert.Equal(t, http.StatusNotFound, rec.Code)
+	})
 
 }
 
