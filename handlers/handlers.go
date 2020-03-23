@@ -67,7 +67,7 @@ func (h *Handler) UpdateBook(c echo.Context) (err error) {
 	}
 	_, e := h.Bookmap.Update(id, b)
 	if e == db.ErrorNotFound {
-		return echo.NewHTTPError(http.StatusNotFound, "book not found")
+		return c.JSON(http.StatusNotFound, "book not found")
 	}
 	return c.JSON(http.StatusOK, b)
 }
@@ -93,7 +93,7 @@ func (h *Handler) GetBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	book, err := h.Bookmap.Get(id)
 	if err == db.ErrorNotFound {
-		return echo.NewHTTPError(http.StatusNotFound, "book not found")
+		return c.JSON(http.StatusNotFound, "book not found")
 	}
 	return c.JSON(http.StatusOK, book)
 }
@@ -102,7 +102,7 @@ func (h *Handler) GetBook(c echo.Context) (err error) {
 func (h *Handler) DeleteBook(c echo.Context) (err error) {
 	id := c.Param("id")
 	if id == "" {
-		return echo.NewHTTPError(http.StatusNotFound, "book not found")
+		return c.JSON(http.StatusNotFound, "book not found")
 	}
 	h.Bookmap.Delete(id)
 	return c.NoContent(http.StatusNoContent)

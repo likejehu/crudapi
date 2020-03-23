@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/labstack/echo"
+	"github.com/likejehu/crudapi/db"
 	"github.com/likejehu/crudapi/handlers/mocks"
 	"github.com/likejehu/crudapi/models"
 	"github.com/stretchr/testify/assert"
@@ -20,6 +21,7 @@ var badbookJSON = `{"title":"","author":"Igor","publisher":"Superizdatel","date"
 `
 var testBook = &models.Book{Title: "SUper kniga", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"}
 var testBadBook = &models.Book{Title: "", Author: "Igor", Publisher: "Superizdatel", PublishDate: "2020-02-02", Rating: 0x3, Status: "CheckedIn"}
+var err = db.ErrorNotFound
 
 type customValidator struct {
 	Validator *validator.Validate
@@ -67,20 +69,40 @@ func TestCreateBook(t *testing.T) {
 	})
 }
 func TestGetBook(t *testing.T) {
-	//setup
-	e := echo.New()
-	e.MaxParam(5)
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	mockBookdatabase := &mocks.Bookdatabase{}
-	h := &Handler{mockBookdatabase}
-	mockBookdatabase.On("Get", mock.Anything).Return(testBook, nil)
-	h.GetBook(c)
-	mockBookdatabase.AssertExpectations(t)
-	// Assertions
-	assert.Equal(t, http.StatusOK, rec.Code)
-	assert.Equal(t, bookJSON, rec.Body.String())
+
+	t.Run("succes case", func(t *testing.T) {
+		//setup
+		e := echo.New()
+		e.MaxParam(5)
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		mockBookdatabase := &mocks.Bookdatabase{}
+		h := &Handler{mockBookdatabase}
+		mockBookdatabase.On("Get", mock.Anything).Return(testBook, nil)
+		h.GetBook(c)
+		mockBookdatabase.AssertExpectations(t)
+		// Assertions
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, bookJSON, rec.Body.String())
+	})
+
+	t.Run("book not found", func(t *testing.T) {
+		//setup
+		e := echo.New()
+		e.MaxParam(5)
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		mockBookdatabase := &mocks.Bookdatabase{}
+		h := &Handler{mockBookdatabase}
+		mockBookdatabase.On("Get", mock.Anything).Return(nil, err)
+		h.GetBook(c)
+		mockBookdatabase.AssertExpectations(t)
+		// Assertions
+		assert.Equal(t, "\"book not found\"\n", rec.Body.String())
+		assert.Equal(t, http.StatusNotFound, rec.Code)
+	})
 }
 
 func TestDeleteBook(t *testing.T) {
