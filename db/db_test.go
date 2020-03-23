@@ -44,15 +44,26 @@ func TestDelete(t *testing.T) {
 	})
 }
 
-/*
 func TestGet(t *testing.T) {
-	testDB.B = mb
-	sv := testDB.Get("02")
-	if sv != testDB.B["02"] {
-		t.Errorf("second value = %v; want  Novie priklyucheniya Igorya", sv)
-	}
+
+	t.Run("succes case", func(t *testing.T) {
+		testDB.B = mb
+		sv, err := testDB.Get("02")
+		if sv != testDB.B["02"] && err != nil {
+			t.Errorf("second value = %v; want  Novie priklyucheniya Igorya", sv)
+			t.Errorf("error = %v; want  nil", err)
+		}
+	})
+
+	t.Run("book not found", func(t *testing.T) {
+		testDB.B = mb
+		_, err := testDB.Get("10")
+		if err != ErrorNotFound {
+			t.Errorf("error = %v; want ErrorNotFound", err)
+		}
+	})
 }
-*/
+
 func TestPost(t *testing.T) {
 	testDB.B = mb
 	fv := testDB.Post("04", tb)
@@ -61,15 +72,26 @@ func TestPost(t *testing.T) {
 	}
 }
 
-/*
 func TestUpdate(t *testing.T) {
-	testDB.B = mb
-	sv := testDB.Update("02", tb)
-	if sv != tb {
-		t.Errorf("second value = %v; want  Super kniga", sv)
-	}
+
+	t.Run("succes case", func(t *testing.T) {
+		testDB.B = mb
+		sv, err := testDB.Update("02", tb)
+		if sv != tb && err != nil {
+			t.Errorf("second value = %v; want  Super kniga", sv)
+			t.Errorf("error = %v; want  nil", err)
+		}
+	})
+
+	t.Run("book not found", func(t *testing.T) {
+		testDB.B = mb
+		_, err := testDB.Update("09", tb)
+		if err != ErrorNotFound {
+			t.Errorf("error = %v; want ErrorNotFound", err)
+		}
+	})
 }
-*/
+
 func TestGetAll(t *testing.T) {
 	testDB.B = mb
 	r := testDB.GetAll()
