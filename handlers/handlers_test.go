@@ -167,21 +167,61 @@ func TestGetLibrary(t *testing.T) {
 }
 
 func TestUpdateBook(t *testing.T) {
-	//setup
-	e := echo.New()
-	e.MaxParam(5)
-	validator := validator.New()
-	e.Validator = &customValidator{validator}
-	req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(bookJSON))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	mockBookdatabase := &mocks.Bookdatabase{}
-	h := &Handler{mockBookdatabase}
-	mockBookdatabase.On("Update", mock.Anything, testBook).Return(testBook, nil)
-	h.UpdateBook(c)
-	mockBookdatabase.AssertExpectations(t)
-	// Assertions
-	assert.Equal(t, http.StatusOK, rec.Code)
-	assert.Equal(t, bookJSON, rec.Body.String())
+
+	t.Run("succes case", func(t *testing.T) {
+		//setup
+		e := echo.New()
+		e.MaxParam(5)
+		validator := validator.New()
+		e.Validator = &customValidator{validator}
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(bookJSON))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		mockBookdatabase := &mocks.Bookdatabase{}
+		h := &Handler{mockBookdatabase}
+		mockBookdatabase.On("Update", mock.Anything, testBook).Return(testBook, nil)
+		h.UpdateBook(c)
+		mockBookdatabase.AssertExpectations(t)
+		// Assertions
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, bookJSON, rec.Body.String())
+	})
+
+	t.Run("validation error", func(t *testing.T) {
+		//setup
+		e := echo.New()
+		e.MaxParam(5)
+		validator := validator.New()
+		e.Validator = &customValidator{validator}
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(badbookJSON))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		mockBookdatabase := &mocks.Bookdatabase{}
+		h := &Handler{mockBookdatabase}
+		h.UpdateBook(c)
+		// Assertions
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+	})
+
+	t.Run("book not found", func(t *testing.T) {
+		//setup
+		e := echo.New()
+		e.MaxParam(5)
+		validator := validator.New()
+		e.Validator = &customValidator{validator}
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(bookJSON))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+		mockBookdatabase := &mocks.Bookdatabase{}
+		h := &Handler{mockBookdatabase}
+		mockBookdatabase.On("Update", mock.Anything, testBook).Return(nil, err)
+		h.UpdateBook(c)
+		mockBookdatabase.AssertExpectations(t)
+		// Assertions
+		assert.Equal(t, "\"book not found\"\n", rec.Body.String())
+		assert.Equal(t, http.StatusNotFound, rec.Code)
+	})
 }
